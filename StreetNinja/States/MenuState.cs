@@ -18,7 +18,7 @@ namespace StreetNinja.States
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/Button");
-            var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
+            var buttonFont = _content.Load<SpriteFont>("Regular");
 
 
             var newGameButton = new Button(buttonTexture, buttonFont)
@@ -65,7 +65,7 @@ namespace StreetNinja.States
 
         public override void PostUpdate(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public override void Update(GameTime gameTime)
