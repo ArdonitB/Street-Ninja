@@ -125,7 +125,7 @@ namespace StreetNinja
 
             KeyboardState keys = Keyboard.GetState();
 
-            if (keys.IsKeyDown(Keys.Q))
+            if (keys.IsKeyDown(Keys.W))
             { 
                 map.ObjectGroups["5Objects"].Objects["Player1"].Y -= 2;
                 if(!Player1.Playing.Active)
