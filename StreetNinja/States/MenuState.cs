@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using StreetNinja.Controls;
+
 
 namespace StreetNinja.States
 {
@@ -15,19 +17,50 @@ namespace StreetNinja.States
 
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
-            var ButtonTexture = _content.load<Texture2D>("Controls/Button");
-            
+            var buttonTexture = _content.Load<Texture2D>("Controls/Button");
+            var buttonFont = _content.Load<SpriteFont>("Fonts/Font");
 
-            var newGameButton = new Button(,)
+
+            var newGameButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 200),
+                Text = "New Game",
+            };
+
+            newGameButton.Click += NewGameButton_Click;
+
+            var loadGameButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 250),
+                Text = "Load Game",
+            };
+
+            loadGameButton.Click += LoadGameButton_Click;
+
+            var quitGameButton = new Button(buttonTexture, buttonFont)
+            {
+                Position = new Vector2(300, 250),
+                Text = "Quit Game",
+            };
+
+            quitGameButton.Click += QuitGameButton_Click; ;
 
             _components = new List<Component>()
             {
-
+                newGameButton,
+                loadGameButton,
+                quitGameButton,
             };
-
+        }
+        
+           
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            spriteBatch.Begin();
+
+            foreach (var component in _components)
+                component.Draw(gameTime, spriteBatch);
+            spriteBatch.End();
         }
 
         public override void PostUpdate(GameTime gameTime)
@@ -37,7 +70,22 @@ namespace StreetNinja.States
 
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            foreach (var component in _components)
+                component.Update(gameTime);
+            
+        }
+        private void QuitGameButton_Click(object sender, EventArgs e)
+        {
+            _game.Exit();
+        }
+        private void LoadGameButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Load Game");
+        }
+        private void NewGameButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("New Game");
+            _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
         }
     }
 }

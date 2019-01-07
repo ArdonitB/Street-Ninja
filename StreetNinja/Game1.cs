@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
 using Squared.Tiled;
+using StreetNinja.States;
 
 
 namespace StreetNinja
@@ -23,6 +24,15 @@ namespace StreetNinja
         Object player;
         Character Player1;
         Enemy Enemy1;
+
+        private State _currentState;
+
+        private State _nextState;
+
+        public void ChangeState(State state)
+        {
+            _nextState = state;
+        }
   
         int jumppixels = 0;
         int jumpcount = 0;
@@ -32,7 +42,7 @@ namespace StreetNinja
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferWidth = 600;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
             graphics.ApplyChanges();
 
@@ -47,7 +57,7 @@ namespace StreetNinja
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -59,7 +69,10 @@ namespace StreetNinja
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _currentState = new MenuState(this, graphics.GraphicsDevice, Content);
 
 
             Player1 = new Character();
@@ -114,7 +127,15 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-             
+            if (_nextState != null)
+            {
+                _currentState = _nextState;
+
+                _nextState = null;
+            }
+            _currentState.Update(gameTime);
+
+           
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -240,7 +261,7 @@ namespace StreetNinja
             
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
             map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Enemy1.GetFrameTexture;
-
+            _currentState.PostUpdate(gameTime);
             base.Update(gameTime);
         }
 
@@ -295,6 +316,7 @@ namespace StreetNinja
             map.Draw(spriteBatch, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), viewportPosition);
             map.ObjectGroups["5Objects"].Objects["Player1"].Y = playerpos;
             spriteBatch.End();
+            _currentState.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }
     }
