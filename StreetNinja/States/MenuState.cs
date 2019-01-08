@@ -23,7 +23,7 @@ namespace StreetNinja.States
 
             var newGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(300, 200),
+                Position = new Vector2(80, 50),
                 Text = "New Game",
             };
 
@@ -31,7 +31,7 @@ namespace StreetNinja.States
 
             var loadGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(100, 100),
+                Position = new Vector2(80, 175),
                 Text = "Load Game",
             };
 
@@ -39,7 +39,7 @@ namespace StreetNinja.States
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(100, 50),
+                Position = new Vector2(80, 300),
                 Text = "Quit Game",
             };
 
@@ -86,6 +86,7 @@ namespace StreetNinja.States
         {
             Console.WriteLine("New Game");
             _game.ChangeState(new GameState(_game, _graphicsDevice, _content));
+            _game.gamestate = Game1.ScreenState.Playing;
         }
     }
 }

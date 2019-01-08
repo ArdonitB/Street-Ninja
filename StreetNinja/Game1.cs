@@ -25,6 +25,15 @@ namespace StreetNinja
         Character Player1;
         Enemy Enemy1;
 
+        public enum ScreenState
+        {
+            MainMenu,
+            Playing,
+            GameOver
+        }
+
+        public ScreenState gamestate = ScreenState.MainMenu;
+
         private State _currentState;
 
         private State _nextState;
@@ -42,7 +51,7 @@ namespace StreetNinja
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferWidth = 600;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 600;   // set this value to the desired height of your window
             graphics.ApplyChanges();
 
@@ -309,14 +318,23 @@ namespace StreetNinja
 
            
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+
+            if (gamestate == ScreenState.Playing)
+            {
+                spriteBatch.Begin();
+                int playerpos = map.ObjectGroups["5Objects"].Objects["Player1"].Y;
+                map.ObjectGroups["5Objects"].Objects["Player1"].Y -= jumppixels;
+
+                map.Draw(spriteBatch, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), viewportPosition);
+                map.ObjectGroups["5Objects"].Objects["Player1"].Y = playerpos;
+                spriteBatch.End();
+            }
+            else if (gamestate == ScreenState.MainMenu)
+            {
+                _currentState.Draw(gameTime, spriteBatch);
+            }
+
             
-            int playerpos = map.ObjectGroups["5Objects"].Objects["Player1"].Y;
-            map.ObjectGroups["5Objects"].Objects["Player1"].Y -= jumppixels;
-            map.Draw(spriteBatch, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), viewportPosition);
-            map.ObjectGroups["5Objects"].Objects["Player1"].Y = playerpos;
-            spriteBatch.End();
-            _currentState.Draw(gameTime, spriteBatch);
             base.Draw(gameTime);
         }
     }
