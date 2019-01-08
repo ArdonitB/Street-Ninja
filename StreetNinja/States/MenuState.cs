@@ -31,7 +31,7 @@ namespace StreetNinja.States
 
             var loadGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(300, 250),
+                Position = new Vector2(100, 100),
                 Text = "Load Game",
             };
 
@@ -39,7 +39,7 @@ namespace StreetNinja.States
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(300, 250),
+                Position = new Vector2(100, 50),
                 Text = "Quit Game",
             };
 
