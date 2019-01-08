@@ -7,20 +7,42 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
+using Squared.Tiled;
 
 namespace StreetNinja
 {
     class Enemy:Character
     {
-        public void Initialize(Vector2 position, bool facing, Game1 p, int a)
+        Squared.Tiled.Object MapObject;
+
+        public void Initialize(Vector2 position, bool facing, Game1 p, int a, Squared.Tiled.Object mapObj)
         {
+            MapObject = mapObj;
             base.Initialize(position, facing, p, a);
 
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Vector2 PlayerPos)
         {
 
+
+            Vector2 temp = (PlayerPos - Position) / (Vector2.Distance(PlayerPos, Position)/2);
+
+            Position += temp;
+
+            if (Math.Abs((int)temp.X) == 0 && Math.Abs((int)temp.Y) == 0)
+            {
+                CurrentAnimation = 0;
+                Playing.Active = true;
+            }
+            else
+            {
+                CurrentAnimation = 0;
+                Playing.Active = true;
+            }
+
+            MapObject.X = (int)Position.X;
+            MapObject.Y = (int)Position.Y;
             base.Update(gameTime);
         }
     }
@@ -28,7 +50,7 @@ namespace StreetNinja
     class Character
     {
         Animation[] animations;
-        Vector2 Position;
+        public Vector2 Position;
         Game1 Parent;
         public bool Facing;
         int AnimationsNo;

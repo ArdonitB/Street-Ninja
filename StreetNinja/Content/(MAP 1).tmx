@@ -121,6 +121,6 @@
  </layer>
  <objectgroup name="5Objects">
   <object id="1" name="Player1" x="16" y="527" width="77" height="119"/>
-  <object id="2" name="Enemy1" x="300" y="527" width="77" height="119"/>
+  <object id="2" name="Enemy1" x="573" y="459" width="77" height="119"/>
  </objectgroup>
 </map>

@@ -91,6 +91,7 @@ namespace StreetNinja
             // TODO: use this.Content to load your game content here
             map = Map.Load(Path.Combine(Content.RootDirectory, "(MAP 1).tmx"), Content);
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Content.Load<Texture2D>("Player1");
+            map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Content.Load<Texture2D>("Enemy1");
             //map.ObjectGroups["5Objects"].Objects["Enemy"].Texture = Content.Load<Texture2D>("Enemy1");
             bounds = map.Layers["0Collision"];
 
@@ -106,7 +107,8 @@ namespace StreetNinja
             Player1.AddAnimation("standing0,runattack6,runattack7,runattack8,runattack8,runattack9,runattack10,runattack11,runattack12", 9, this);
             Player1.CurrentAnimation = 2;
 
-            Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), true, this, 2);
+            Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 3, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
+            Enemy1.AddAnimation("Enemy1", 1, this);
            Enemy1.AddAnimation("run0,run1,run2,run3,run4,run5", 6, this);
             Enemy1.AddAnimation("jump0,jump1,jump2,jump3", 4, this);
             Enemy1.CurrentAnimation = 0;
@@ -144,7 +146,6 @@ namespace StreetNinja
             }
             _currentState.Update(gameTime);
 
-           
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -266,7 +267,7 @@ namespace StreetNinja
             
 
             Player1.Update(gameTime);
-            Enemy1.Update(gameTime);
+            Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y));
             
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
             map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Enemy1.GetFrameTexture;
