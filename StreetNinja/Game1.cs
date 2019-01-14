@@ -25,6 +25,12 @@ namespace StreetNinja
         Character Player1;
         Enemy Enemy1;
 
+        //Health Bar
+        Texture2D healthTexture;
+        Rectangle healthRectangle;
+
+        MouseState PastMouse;
+
         public enum ScreenState
         {
             MainMenu,
@@ -84,8 +90,8 @@ namespace StreetNinja
             _currentState = new MenuState(this, graphics.GraphicsDevice, Content);
 
 
-            Player1 = new Character();
-            Enemy1 = new Enemy();
+            Player1 = new Character(5);
+            Enemy1 = new Enemy(3);
             
             
             // TODO: use this.Content to load your game content here
@@ -109,9 +115,9 @@ namespace StreetNinja
 
             Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 3, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
             Enemy1.AddAnimation("Enemy1", 1, this);
-           Enemy1.AddAnimation("run0,run1,run2,run3,run4,run5", 6, this);
-            Enemy1.AddAnimation("jump0,jump1,jump2,jump3", 4, this);
-            Enemy1.CurrentAnimation = 0;
+           Enemy1.AddAnimation("run0,run1,run2,", 3, this);
+            
+            Enemy1.CurrentAnimation = 1;
 
         }
 
@@ -155,6 +161,12 @@ namespace StreetNinja
                 Player1.CurrentAnimation = 2;
 
             KeyboardState keys = Keyboard.GetState();
+
+            if (keys.IsKeyDown(Keys.U))
+            {
+                Player1.health -= (float)0.25;
+
+            }
 
             if (keys.IsKeyDown(Keys.W))
             { 
@@ -328,6 +340,8 @@ namespace StreetNinja
 
                 map.Draw(spriteBatch, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), viewportPosition);
                 map.ObjectGroups["5Objects"].Objects["Player1"].Y = playerpos;
+                Player1.Draw(spriteBatch, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y)-viewportPosition);
+                Enemy1.Draw(spriteBatch, viewportPosition);
                 spriteBatch.End();
             }
             else if (gamestate == ScreenState.MainMenu)
