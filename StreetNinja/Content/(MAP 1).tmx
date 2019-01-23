@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="2017.06.27" orientation="orthogonal" renderorder="right-down" width="100" height="25" tilewidth="48" tileheight="48" nextobjectid="2">
+<map version="1.0" tiledversion="2017.06.27" orientation="orthogonal" renderorder="right-down" width="100" height="25" tilewidth="48" tileheight="48" nextobjectid="6">
  <tileset firstgid="1" name="streettileset_0 (1)" tilewidth="48" tileheight="48" spacing="3" tilecount="77" columns="11">
   <image source="streettileset_0 (1).png" width="576" height="356"/>
  </tileset>
@@ -122,5 +122,6 @@
  <objectgroup name="5Objects">
   <object id="1" name="Player1" x="16" y="527" width="77" height="119"/>
   <object id="2" name="Enemy1" x="573" y="459" width="77" height="119"/>
+  <object id="5" name="Flag" x="4629" y="602" width="90" height="152"/>
  </objectgroup>
 </map>

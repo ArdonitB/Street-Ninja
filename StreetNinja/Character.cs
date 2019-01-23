@@ -49,6 +49,15 @@ namespace StreetNinja
 
             Position += temp;
 
+            if(temp.X<0)
+            {
+                Facing = false;
+            }
+            else
+            {
+                Facing = true;
+            }
+
             if (Math.Abs((int)temp.X) == 0 && Math.Abs((int)temp.Y) == 0)
             {
                 if (CurrentAnimation != 0)
@@ -61,10 +70,15 @@ namespace StreetNinja
             {
                 if (!Playing.Active)
                 {
-                    Console.WriteLine("set animation");
                     CurrentAnimation = 1;
                     Playing.Active = true;
                 }
+            }
+
+            if (count != -1)
+            {
+                if (animations[current].Active)
+                    animations[current].Update(gameTime);
             }
 
             MapObject.X = (int)Position.X;
@@ -123,15 +137,7 @@ namespace StreetNinja
             temp.Initialize(Position, false, files, no, g);
             animations[count] = temp;
         }
-        public new void Update(GameTime gameTime)
-        {
-            if (count != -1)
-            {
-                if (animations[current].Active)
-                    animations[current].Update(gameTime);
-            }
 
-        }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 vp)
         {

@@ -98,7 +98,8 @@ namespace StreetNinja
             map = Map.Load(Path.Combine(Content.RootDirectory, "(MAP 1).tmx"), Content);
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Content.Load<Texture2D>("Player1");
             map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Content.Load<Texture2D>("Enemy1");
-            //map.ObjectGroups["5Objects"].Objects["Enemy"].Texture = Content.Load<Texture2D>("Enemy1");
+            map.ObjectGroups["5Objects"].Objects["Flag"].Texture = Content.Load<Texture2D>("Flag");
+            
             bounds = map.Layers["0Collision"];
 
             viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y);
@@ -115,9 +116,9 @@ namespace StreetNinja
 
             Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 3, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
             Enemy1.AddAnimation("Enemy1", 1, this);
-           Enemy1.AddAnimation("run0,run1,run2,", 3, this);
+           Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
             
-            Enemy1.CurrentAnimation = 1;
+            Enemy1.CurrentAnimation = 0;
 
         }
 
@@ -192,7 +193,7 @@ namespace StreetNinja
 
             if (keys.IsKeyDown(Keys.D))
             {
-                map.ObjectGroups["5Objects"].Objects["Player1"].X += 5;
+                map.ObjectGroups["5Objects"].Objects["Player1"].X += 20;
                 
                 Player1.Facing = true;
                 if (!Player1.Playing.Active)
@@ -249,26 +250,27 @@ namespace StreetNinja
 
             }
 
-            if (playerpos.X < 500)
-                viewportPosition = new Vector2(0, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 1000)
-                viewportPosition = new Vector2(500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 1500)
-                viewportPosition = new Vector2(1000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if(playerpos.X < 2000)
-                viewportPosition = new Vector2(1500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 2500)
-                viewportPosition = new Vector2(2000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 3000)
-                viewportPosition = new Vector2(2500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 3500)
-                viewportPosition = new Vector2(3000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 4000)
-                viewportPosition = new Vector2(3500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 4500)
-                viewportPosition = new Vector2(4000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            else if (playerpos.X < 5000)
-                viewportPosition = new Vector2(4500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X + map.ObjectGroups["5Objects"].Objects["Player1"].Width/2 - 300, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //if (playerpos.X < 500)
+            //    viewportPosition = new Vector2(0, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 1000)
+            //    viewportPosition = new Vector2(500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 1500)
+            //    viewportPosition = new Vector2(1000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if(playerpos.X < 2000)
+            //    viewportPosition = new Vector2(1500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 2500)
+            //    viewportPosition = new Vector2(2000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 3000)
+            //    viewportPosition = new Vector2(2500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 3500)
+            //    viewportPosition = new Vector2(3000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 4000)
+            ///    viewportPosition = new Vector2(3500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 4500)
+            //   viewportPosition = new Vector2(4000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+            //else if (playerpos.X < 5000)
+            //  viewportPosition = new Vector2(4500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
             // TODO: Add your update logic here
 
             if (jumppixels > 0)
