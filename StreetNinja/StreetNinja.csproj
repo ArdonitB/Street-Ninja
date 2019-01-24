@@ -50,6 +50,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\GameState.cs" />
+    <Compile Include="States\LevelState.cs" />
     <Compile Include="States\MenuState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="Tiled.cs" />

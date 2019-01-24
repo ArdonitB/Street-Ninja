@@ -22,7 +22,7 @@ namespace StreetNinja
         int frameCount;
 
         // The index of the current frame we are displaying
-        int currentFrame;
+        public int currentFrame;
 
         // The color of the frame we will be displaying
         Color color;

@@ -145,6 +145,11 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (Player1.CurrentAnimation == 3)
+            {
+                Player1.Playing.currentFrame = 9;
+                Rectangle hitbox1 = 
+            }
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -193,7 +198,7 @@ namespace StreetNinja
 
             if (keys.IsKeyDown(Keys.D))
             {
-                map.ObjectGroups["5Objects"].Objects["Player1"].X += 20;
+                map.ObjectGroups["5Objects"].Objects["Player1"].X += 5;
                 
                 Player1.Facing = true;
                 if (!Player1.Playing.Active)
@@ -247,6 +252,7 @@ namespace StreetNinja
             {
                 map.ObjectGroups["5Objects"].Objects["Player1"].Y = (int)playerpos.Y;
                 map.ObjectGroups["5Objects"].Objects["Player1"].X = (int)playerpos.X;
+                
 
             }
 
@@ -292,7 +298,7 @@ namespace StreetNinja
         public bool CheckBounds(Squared.Tiled.Object obj)
         {
             bool check = false;
-
+            
             Rectangle playrec = new Rectangle(
                 obj.X,
                 obj.Y + (obj.Height-10),
@@ -317,6 +323,13 @@ namespace StreetNinja
                             check = true;
                     }
                 }
+            }
+
+            Squared.Tiled.Object flag = map.ObjectGroups["5Objects"].Objects["Flag"];
+            Rectangle flagrec = new Rectangle(flag.X,flag.Y,flag.Width,flag.Height);
+            if (playrec.Intersects(flagrec))
+            {
+                
             }
 
             return check;

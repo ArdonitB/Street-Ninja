@@ -18,7 +18,7 @@ namespace StreetNinja
         Game1 Parent;
         public bool Facing;
         int AnimationsNo;
-        int current = 0;
+        public int current = 0;
         int count = -1;
         Squared.Tiled.Object MapObject;
 
