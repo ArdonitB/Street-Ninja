@@ -153,6 +153,8 @@ namespace StreetNinja
             pixel.SetData<Color>(colorData);
 
             rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, 80 * (int)(health / starthealth), 10);
+            hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100);
+            spriteBatch.Draw(pixel, hitbox, Color.Purple);
 
             if (health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);
@@ -167,9 +169,9 @@ namespace StreetNinja
         Game1 Parent;
         public bool Facing;
         int AnimationsNo;
-        int current = 0;
+        int current = 0; 
         int count = -1;
-        public Rectangle rectangle;
+        public Rectangle rectangle, hitbox,punchbox;
         Texture2D texture;
 
         public float health;
@@ -231,6 +233,7 @@ namespace StreetNinja
             Facing = facing;
             AnimationsNo = a;
             animations = new Animation[a];
+            hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 15);
         }
 
         public void AddAnimation(string files, int no, Game1 g)
@@ -241,6 +244,36 @@ namespace StreetNinja
             animations[count] = temp;
         }
 
+        public Rectangle IsPunch(Vector2 pos)
+        {
+            Rectangle temp = new Rectangle(0, 0, 0, 0);
+
+            if (CurrentAnimation == 3)
+            {
+                if (Playing.currentFrame >=6)
+                {
+                    if(!Facing)
+                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+20 +20, 20, 20);    
+                    else
+                        temp = new Rectangle((int)pos.X +55, (int)pos.Y+20 +20, 20, 20);
+                }
+            }
+            else if (CurrentAnimation == 5)
+            {
+                if (Playing.currentFrame >= 6)
+                {
+                    if (!Facing)
+                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+20 + 20, 20, 20);
+                    else
+                        temp = new Rectangle((int)pos.X + 55, (int)pos.Y+20 + 20, 20, 20);
+                }
+            }
+
+            punchbox = temp;
+            return temp;
+
+        }
+
         public void Update(GameTime gameTime)
         {
             if (count != -1)
@@ -248,12 +281,11 @@ namespace StreetNinja
                 if (animations[current].Active)
                     animations[current].Update(gameTime);
             }
-            {
-               
-            }
+
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 pos)
         {
+            IsPunch(pos);
             // Make a 1x1 texture named pixel.  
             Texture2D pixel = new Texture2D(Parent.GraphicsDevice, 1, 1);
 
@@ -266,6 +298,11 @@ namespace StreetNinja
             pixel.SetData<Color>(colorData);
 
             rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 80 * (int)(health / starthealth), 10);
+            hitbox = new Rectangle((int)pos.X+20, (int)pos.Y, 40 ,100);
+
+            //spriteBatch.Draw(pixel, hitbox, Color.Green);
+            spriteBatch.Draw(pixel, punchbox, Color.Yellow);
+
 
             if (health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);

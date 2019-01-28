@@ -145,11 +145,7 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (Player1.CurrentAnimation == 3)
-            {
-                Player1.Playing.currentFrame = 9;
-                Rectangle hitbox1 = 
-            }
+            
             if (_nextState != null)
             {
                 _currentState = _nextState;
