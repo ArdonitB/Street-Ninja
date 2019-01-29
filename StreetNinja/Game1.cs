@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.IO;
 using Squared.Tiled;
 using StreetNinja.States;
+using System;
 
 
 namespace StreetNinja
@@ -21,7 +22,7 @@ namespace StreetNinja
         Layer pavement;
         Vector2 viewportPosition;
         int tilePixel;
-        Object player;
+        Squared.Tiled.Object player;
         Character Player1;
         Enemy Enemy1;
 
@@ -91,7 +92,7 @@ namespace StreetNinja
 
 
             Player1 = new Character(5);
-            Enemy1 = new Enemy(3);
+            Enemy1 = new Enemy(10);
             
             
             // TODO: use this.Content to load your game content here
@@ -117,6 +118,7 @@ namespace StreetNinja
             Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 3, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
             Enemy1.AddAnimation("Enemy1", 1, this);
            Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
+            Enemy1.AddAnimation("hit", 1, this);
             
             Enemy1.CurrentAnimation = 0;
 
@@ -145,7 +147,22 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
+            if(Player1.punchbox.Intersects(Enemy1.hitbox))
+            {
+                if (Enemy1.CurrentAnimation == 2)
+                {
+                    Enemy1.Playing.currentFrame = 1;
+                }
+
+                    
+
+
+
+
+
+
+            }
+
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -166,7 +183,7 @@ namespace StreetNinja
 
             if (keys.IsKeyDown(Keys.U))
             {
-                Player1.health -= (float)0.25;
+                Player1.Health -= (float)0.25;
 
             }
 

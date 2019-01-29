@@ -22,6 +22,7 @@ namespace StreetNinja
         int count = -1;
         Squared.Tiled.Object MapObject;
 
+
         public Enemy(int newhealth):base(newhealth)
         {
 
@@ -152,11 +153,11 @@ namespace StreetNinja
             // Set the texture data with our color information.  
             pixel.SetData<Color>(colorData);
 
-            rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, 80 * (int)(health / starthealth), 10);
+            rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, 80 * (int)(Health / starthealth), 10);
             hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100);
             spriteBatch.Draw(pixel, hitbox, Color.Purple);
 
-            if (health > 0)
+            if (Health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);
         }
 
@@ -172,9 +173,23 @@ namespace StreetNinja
         int current = 0; 
         int count = -1;
         public Rectangle rectangle, hitbox,punchbox;
+        public bool hitable;
         Texture2D texture;
 
-        public float health;
+        float health;
+
+        public float Health
+        {
+            get
+            {
+                return health;
+            }
+            set
+            {
+                health -= value;
+                hitable = false;
+            }
+        }
 
         public float starthealth;
 
@@ -234,6 +249,7 @@ namespace StreetNinja
             AnimationsNo = a;
             animations = new Animation[a];
             hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 15);
+            hitable = true;
         }
 
         public void AddAnimation(string files, int no, Game1 g)
