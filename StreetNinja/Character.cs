@@ -155,7 +155,7 @@ namespace StreetNinja
 
             rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, 80 * (int)(Health / starthealth), 10);
             hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100);
-            spriteBatch.Draw(pixel, hitbox, Color.Purple);
+            //spriteBatch.Draw(pixel, hitbox, Color.Purple);
 
             if (Health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);
@@ -317,7 +317,7 @@ namespace StreetNinja
             hitbox = new Rectangle((int)pos.X+20, (int)pos.Y, 40 ,100);
 
             //spriteBatch.Draw(pixel, hitbox, Color.Green);
-            spriteBatch.Draw(pixel, punchbox, Color.Yellow);
+            //spriteBatch.Draw(pixel, punchbox, Color.Yellow);
 
 
             if (health > 0)

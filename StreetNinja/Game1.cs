@@ -147,22 +147,16 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
             if(Player1.punchbox.Intersects(Enemy1.hitbox))
             {
-                if (Enemy1.CurrentAnimation == 2)
-                {
-                    Enemy1.Playing.currentFrame = 1;
-                }
-
-                    
-
-
-
-
+                Enemy1.CurrentAnimation = 2;
+                Enemy1.Playing.Active = true;
+                
 
 
             }
-
+            
             if (_nextState != null)
             {
                 _currentState = _nextState;
