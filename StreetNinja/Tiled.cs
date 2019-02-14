@@ -1114,7 +1114,7 @@ namespace Squared.Tiled
             {
                 if (layer.Value == true)
                 {
-                    Console.WriteLine(layer.Key);
+                    //Console.WriteLine(layer.Key);
                     //if (layer.Key == "1Road")
                     {
                         if (this.Orientation == "isometric")

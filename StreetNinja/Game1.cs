@@ -92,7 +92,7 @@ namespace StreetNinja
 
 
             Player1 = new Character(5);
-            Enemy1 = new Enemy(10);
+            Enemy1 = new Enemy(5);
             
             
             // TODO: use this.Content to load your game content here
@@ -115,11 +115,11 @@ namespace StreetNinja
             Player1.AddAnimation("standing0,runattack6,runattack7,runattack8,runattack8,runattack9,runattack10,runattack11,runattack12", 9, this);
             Player1.CurrentAnimation = 2;
 
-            Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 3, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
+            Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 4, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
             Enemy1.AddAnimation("Enemy1", 1, this);
            Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
             Enemy1.AddAnimation("hit", 1, this);
-            
+            Enemy1.AddAnimation("dead1,dead2", 2, this);
             Enemy1.CurrentAnimation = 0;
 
         }
@@ -147,16 +147,12 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
-            if(Player1.punchbox.Intersects(Enemy1.hitbox))
+            if (Enemy1.Health == 0)
             {
-                Enemy1.CurrentAnimation = 2;
+                Enemy1.CurrentAnimation = 3;
                 Enemy1.Playing.Active = true;
-                
-
-
             }
-            
+                
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -237,6 +233,8 @@ namespace StreetNinja
             }
             if (keys.IsKeyDown(Keys.J))
             {
+                bool intersects = Player1.punchbox.Intersects(Enemy1.hitbox);
+
                 if (Player1.CurrentAnimation ==2 ||Player1.CurrentAnimation==3)
                 {
                     Player1.CurrentAnimation = 3;
@@ -246,6 +244,19 @@ namespace StreetNinja
                 {
                     Player1.CurrentAnimation = 5;
                     Player1.Playing.Active = true;
+                }
+                
+                if (intersects && Enemy1.hitable)
+                {
+                    Enemy1.CurrentAnimation = 2;
+                    Enemy1.Playing.Active = true;
+                    Enemy1.Health -= 1;
+                    Console.WriteLine(Enemy1.Health);
+                    Enemy1.hitable = false;
+                }
+                else if (!intersects && !Enemy1.hitable)
+                {
+                    Enemy1.hitable = true;
                 }
             }
             
@@ -292,7 +303,7 @@ namespace StreetNinja
                 jumpcount = 0;
 
             
-
+            
             Player1.Update(gameTime);
             Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y));
             
