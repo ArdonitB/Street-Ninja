@@ -233,8 +233,6 @@ namespace StreetNinja
             }
             if (keys.IsKeyDown(Keys.J))
             {
-                bool intersects = Player1.punchbox.Intersects(Enemy1.hitbox);
-
                 if (Player1.CurrentAnimation ==2 ||Player1.CurrentAnimation==3)
                 {
                     Player1.CurrentAnimation = 3;
@@ -245,21 +243,36 @@ namespace StreetNinja
                     Player1.CurrentAnimation = 5;
                     Player1.Playing.Active = true;
                 }
-                
-                if (intersects && Enemy1.hitable)
+               
+            }
+            Rectangle p = Player1.punchbox;
+            Rectangle e = Enemy1.hitbox;
+
+            Rectangle b = new Rectangle(0, 0, 0, 0);
+            bool intersects = false;
+            Console.WriteLine(p + " - " + e);
+            if (p != b)
+            {
+                intersects = e.Intersects(p);
+
+                if (intersects)
                 {
-                    Enemy1.CurrentAnimation = 2;
-                    Enemy1.Playing.Active = true;
-                    Enemy1.Health -= 1;
-                    Console.WriteLine(Enemy1.Health);
-                    Enemy1.hitable = false;
-                }
-                else if (!intersects && !Enemy1.hitable)
-                {
-                    Enemy1.hitable = true;
+                    Console.WriteLine("hit enemy: " + Enemy1.hitable);
                 }
             }
-            
+            if (intersects && Enemy1.hitable)
+            {
+                Enemy1.CurrentAnimation = 2;
+                Enemy1.Playing.Active = true;
+                Enemy1.Health -= 1;
+                Console.WriteLine("hit enemy & hitable: " + Enemy1.hitable);
+                Enemy1.hitable = false;
+            }
+            else if (!intersects && !Enemy1.hitable)
+            {
+                Enemy1.hitable = true;
+            }
+
             if (keys.IsKeyDown(Keys.Y))
             {
                 Player1.CurrentAnimation = 4;

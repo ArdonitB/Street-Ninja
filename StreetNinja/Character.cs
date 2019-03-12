@@ -282,10 +282,12 @@ namespace StreetNinja
                         temp = new Rectangle((int)pos.X -10, (int)pos.Y+20 + 20, 20, 20);
                     else
                         temp = new Rectangle((int)pos.X + 55, (int)pos.Y+20 + 20, 20, 20);
+
                 }
             }
 
             punchbox = temp;
+
             return temp;
 
         }
@@ -313,11 +315,11 @@ namespace StreetNinja
             // Set the texture data with our color information.  
             pixel.SetData<Color>(colorData);
 
-            rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 80 * (int)(health / starthealth), 10);
+            rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 80 * (int)(starthealth / health), 10);
             hitbox = new Rectangle((int)pos.X+20, (int)pos.Y, 40 ,100);
 
-            //spriteBatch.Draw(pixel, hitbox, Color.Green);
-            //spriteBatch.Draw(pixel, punchbox, Color.Yellow);
+            spriteBatch.Draw(pixel, hitbox, Color.Green);
+            spriteBatch.Draw(pixel, punchbox, Color.Yellow);
 
 
             if (health > 0)
