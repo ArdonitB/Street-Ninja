@@ -46,11 +46,13 @@ namespace StreetNinja
         {
 
 
-            Vector2 temp = (PlayerPos - Position) / (Vector2.Distance(PlayerPos, Position)/2);
+            float dist = Vector2.Distance(PlayerPos, Position);
+            Vector2 temp = (PlayerPos - Position) / dist;
 
             Position += temp;
 
-            if(temp.X<0)
+            Vector2 difference = PlayerPos - Position;
+            if(difference.X<0)
             {
                 Facing = false;
             }
@@ -59,7 +61,7 @@ namespace StreetNinja
                 Facing = true;
             }
 
-            if (Math.Abs((int)temp.X) == 0 && Math.Abs((int)temp.Y) == 0)
+            if (Math.Abs((int)difference.X) == 0 && Math.Abs((int)difference.Y) == 0)
             {
                 if (CurrentAnimation != 0)
                 {
@@ -80,6 +82,11 @@ namespace StreetNinja
             {
                 if (animations[current].Active)
                     animations[current].Update(gameTime);
+            }
+
+            if(dist <= 20)
+            {
+               
             }
 
             MapObject.X = (int)Position.X;
@@ -155,7 +162,7 @@ namespace StreetNinja
 
             rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, (int)(80 * (Health / starthealth)), 10);
             hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100);
-            spriteBatch.Draw(pixel, hitbox, Color.Purple);
+            //spriteBatch.Draw(pixel, hitbox, Color.Purple);
 
             if (Health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);
@@ -318,8 +325,8 @@ namespace StreetNinja
             rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 80 * (int)(starthealth / health), 10);
             hitbox = new Rectangle((int)pos.X+20, (int)pos.Y, 40 ,100);
 
-            spriteBatch.Draw(pixel, hitbox, Color.Green);
-            spriteBatch.Draw(pixel, punchbox, Color.Yellow);
+            //spriteBatch.Draw(pixel, hitbox, Color.Green);
+            //spriteBatch.Draw(pixel, punchbox, Color.Yellow);
 
 
             if (health > 0)
