@@ -5,6 +5,7 @@ using System.IO;
 using Squared.Tiled;
 using StreetNinja.States;
 using System;
+using System.Collections.Generic;
 
 
 namespace StreetNinja
@@ -24,7 +25,8 @@ namespace StreetNinja
         int tilePixel;
         Squared.Tiled.Object player;
         Character Player1;
-        Enemy Enemy1;
+        List<Enemy> enemies = new List<Enemy>();
+        //Enemy Enemy1;
 
         //Health Bar
         Texture2D healthTexture;
@@ -92,7 +94,7 @@ namespace StreetNinja
 
 
             Player1 = new Character(5);
-            Enemy1 = new Enemy(5);
+            //Enemy1 = new Enemy(5);
             
             
             // TODO: use this.Content to load your game content here
@@ -115,12 +117,18 @@ namespace StreetNinja
             Player1.AddAnimation("standing0,runattack6,runattack7,runattack8,runattack8,runattack9,runattack10,runattack11,runattack12", 9, this);
             Player1.CurrentAnimation = 2;
 
-            Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy1"].X, map.ObjectGroups["5Objects"].Objects["Enemy1"].Y), false, this, 4, map.ObjectGroups["5Objects"].Objects["Enemy1"]);
-            Enemy1.AddAnimation("Enemy1", 1, this);
-           Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
-            Enemy1.AddAnimation("hit", 1, this);
-            Enemy1.AddAnimation("dead1,dead2", 2, this);
-            Enemy1.CurrentAnimation = 0;
+            for (int i = 1; i <= 5; i++)
+            {
+                Enemy Enemy1 = new Enemy(5);
+                Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 4, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
+                Enemy1.AddAnimation("Enemy1", 1, this);
+                Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
+                Enemy1.AddAnimation("hit", 1, this);
+                Enemy1.AddAnimation("dead1,dead2", 2, this);
+                Enemy1.CurrentAnimation = 0;
+                enemies.Add(Enemy1);
+            }
+           
 
         }
 
@@ -147,12 +155,7 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (Enemy1.Health == 0)
-            {
-                Enemy1.CurrentAnimation = 3;
-                Enemy1.Playing.Active = true;
-            }
-                
+                          
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -246,31 +249,39 @@ namespace StreetNinja
                
             }
             Rectangle p = Player1.punchbox;
-            Rectangle e = Enemy1.hitbox;
-
-            Rectangle b = new Rectangle(0, 0, 0, 0);
-            bool intersects = false;
-            Console.WriteLine(p + " - " + e);
-            if (p != b)
+            int j = 1;
+            foreach (Enemy Enemy1 in enemies)
             {
-                intersects = e.Intersects(p);
-
-                if (intersects)
+                if (Enemy1.CurrentAnimation != 3)
                 {
-                    Console.WriteLine("hit enemy: " + Enemy1.hitable);
+                    Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y), Player1);
+                    map.ObjectGroups["5Objects"].Objects["Enemy" + j].Texture = Enemy1.GetFrameTexture;
+                    Rectangle e = Enemy1.hitbox;
+
+                    Rectangle b = new Rectangle(0, 0, 0, 0);
+                    bool intersects = false;
+                    //Console.WriteLine(p + " - " + e);
+                    if (p != b)
+                    {
+                        intersects = e.Intersects(p);
+
+                        if (intersects)
+                        {
+                            Console.WriteLine("hit enemy: " + Enemy1.Hitable);
+                        }
+                    }
+                    if (intersects && Enemy1.Hitable)
+                    {
+
+                            Enemy1.CurrentAnimation = 2;
+                            Enemy1.Playing.Active = true;
+                            Enemy1.Health -= 1;
+                            Console.WriteLine("hit enemy & hitable: " + Enemy1.Hitable);
+                            Console.WriteLine(Player1.Position.Y + " " + Enemy1.Position.Y);
+                            Enemy1.Hitable = false;
+                    }
                 }
-            }
-            if (intersects && Enemy1.hitable)
-            {
-                Enemy1.CurrentAnimation = 2;
-                Enemy1.Playing.Active = true;
-                Enemy1.Health -= 1;
-                Console.WriteLine("hit enemy & hitable: " + Enemy1.hitable);
-                Enemy1.hitable = false;
-            }
-            else if (!intersects && !Enemy1.hitable)
-            {
-                Enemy1.hitable = true;
+                j++;
             }
 
             if (keys.IsKeyDown(Keys.Y))
@@ -318,10 +329,11 @@ namespace StreetNinja
             
             
             Player1.Update(gameTime);
-            Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y));
-            
+
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
-            map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Enemy1.GetFrameTexture;
+
+                
+
             _currentState.PostUpdate(gameTime);
             base.Update(gameTime);
         }
@@ -383,11 +395,23 @@ namespace StreetNinja
                 spriteBatch.Begin();
                 int playerpos = map.ObjectGroups["5Objects"].Objects["Player1"].Y;
                 map.ObjectGroups["5Objects"].Objects["Player1"].Y -= jumppixels;
-
+                int j = 1;
+                foreach (Enemy Enemy1 in enemies)
+                {
+                    if (Enemy1.CurrentAnimation == 3)
+                    {
+                        map.ObjectGroups["5Objects"].Objects["Enemy"+j].Width = 120;
+                    }
+                    Enemy1.Draw(spriteBatch, viewportPosition);
+                    j++;
+                }
                 map.Draw(spriteBatch, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), viewportPosition);
                 map.ObjectGroups["5Objects"].Objects["Player1"].Y = playerpos;
                 Player1.Draw(spriteBatch, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y)-viewportPosition);
-                Enemy1.Draw(spriteBatch, viewportPosition);
+                foreach (Enemy Enemy1 in enemies)
+                {
+                    Enemy1.Draw(spriteBatch, viewportPosition);
+                }
                 spriteBatch.End();
             }
             else if (gamestate == ScreenState.MainMenu)

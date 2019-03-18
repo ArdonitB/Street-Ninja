@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
+using System.Timers;
 using Squared.Tiled;
 
 namespace StreetNinja
@@ -21,6 +22,15 @@ namespace StreetNinja
         public int current = 0;
         int count = -1;
         Squared.Tiled.Object MapObject;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        Map map;
+        Layer bounds;
+        Layer pavement;
+        Vector2 viewportPosition;
+        int tilePixel;
+        Squared.Tiled.Object player;
+        Enemy Enemy1;
 
 
         public Enemy(int newhealth):base(newhealth)
@@ -42,53 +52,67 @@ namespace StreetNinja
         }
 
 
-        public void Update(GameTime gameTime, Vector2 PlayerPos)
+        public void Update(GameTime gameTime, Vector2 PlayerPos, Character Player1)
         {
-
-
-            float dist = Vector2.Distance(PlayerPos, Position);
-            Vector2 temp = (PlayerPos - Position) / dist;
-
-            Position += temp;
-
-            Vector2 difference = PlayerPos - Position;
-            if(difference.X<0)
+            if (Health > 0)
             {
-                Facing = false;
-            }
-            else
-            {
-                Facing = true;
-            }
+                float dist = Vector2.Distance(PlayerPos, Position);
+                Vector2 temp = (PlayerPos - Position) / dist;
 
-            if (Math.Abs((int)difference.X) == 0 && Math.Abs((int)difference.Y) == 0)
-            {
-                if (CurrentAnimation != 0)
+                if(dist>60 && dist <250)
+                    Position += temp;
+                else
+                {
+
+                }
+
+                Vector2 difference = PlayerPos - Position;
+                if (difference.X < 0)
+                {
+                    Facing = false;
+                }
+                else
+                {
+                    Facing = true;
+                }
+
+                if (Math.Abs((int)difference.X) == 0 && Math.Abs((int)difference.Y) == 0)
+                {
+                    if (CurrentAnimation != 0)
+                    {
+                        CurrentAnimation = 0;
+                        Playing.Active = true;
+                    }
+                }
+                else
+                {
+                    if (!Playing.Active)
+                    {
+                        CurrentAnimation = 1;
+                        Playing.Active = true;
+                    }
+                }
+                if (dist <= 80 && CurrentAnimation != 0)
                 {
                     CurrentAnimation = 0;
-                    Playing.Active = true;
                 }
             }
             else
             {
-                if (!Playing.Active)
-                {
-                    CurrentAnimation = 1;
-                    Playing.Active = true;
-                }
+                CurrentAnimation = 3;
             }
-
+            if(!Hitable)
+                
+            {
+                CurrentAnimation = 2;
+            }
             if (count != -1)
             {
                 if (animations[current].Active)
                     animations[current].Update(gameTime);
             }
 
-            if(dist <= 20)
-            {
-               
-            }
-
+            
             MapObject.X = (int)Position.X;
             MapObject.Y = (int)Position.Y;
             base.Update(gameTime);
@@ -180,10 +204,36 @@ namespace StreetNinja
         int current = 0; 
         int count = -1;
         public Rectangle rectangle, hitbox,punchbox;
-        public bool hitable;
+        private bool hitable;
         Texture2D texture;
+        Timer hittimer = new Timer();
 
         float health;
+        public bool Hitable
+        {
+            get
+            {
+                return hitable;
+            }
+
+            set
+            {
+                hitable = false;
+                if (!hittimer.Enabled)
+                {
+                    hittimer.Interval = 250;
+                    hittimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                    hittimer.Enabled = true;
+                }
+
+
+            }
+        }
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            hittimer.Enabled = false;
+            hitable = true;
+        }
 
         public float Health
         {
@@ -301,11 +351,17 @@ namespace StreetNinja
 
         public void Update(GameTime gameTime)
         {
-            if (count != -1)
+            if (this.Health == 0)
+            {
+                this.CurrentAnimation = 3;
+                //animations[current].Active = true;
+            }
+            else if (count != -1)
             {
                 if (animations[current].Active)
                     animations[current].Update(gameTime);
             }
+
 
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 pos)
