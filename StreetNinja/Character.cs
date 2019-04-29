@@ -38,7 +38,7 @@ namespace StreetNinja
 
         }
 
-        public void Initialize(Vector2 position, bool facing, Game1 p, int a, Squared.Tiled.Object mapObj)
+        public void Initialize(Vector2 position, bool facing, Game1 p, int a,int d, Squared.Tiled.Object mapObj)
         {
             MapObject = mapObj;
             Position = position;
@@ -46,7 +46,7 @@ namespace StreetNinja
             Facing = facing;
             AnimationsNo = a;
             animations = new Animation[a];
-            base.Initialize(position, facing, p, a);
+            base.Initialize(position, facing, p, a,d);
 
 
         }
@@ -220,6 +220,7 @@ namespace StreetNinja
         public Rectangle rectangle, hitbox,punchbox;
         private bool hitable;
         Texture2D texture;
+        int death = -1;
         Timer hittimer = new Timer();
 
         float health;
@@ -312,8 +313,9 @@ namespace StreetNinja
             }
         }
 
-        public void Initialize(Vector2 position, bool facing, Game1 p, int a)
+        public void Initialize(Vector2 position, bool facing, Game1 p, int a, int d)
         {
+            death = d;
             Position = position;
             Parent = p;
             Facing = facing;
@@ -365,12 +367,21 @@ namespace StreetNinja
 
         public void Update(GameTime gameTime)
         {
-            if (this.Health == 0)
+            if (this.Health <= 0)
             {
-                this.CurrentAnimation = 3;
-                //animations[current].Active = true;
+                this.CurrentAnimation = death;
+
+
+
+                if (animations[current] != null)
+                    animations[current].Active = true;
             }
-            else if (count != -1)
+            else if (CurrentAnimation == death)
+            {
+                if (animations[current].Active)
+                    animations[current].Update(gameTime);
+            }
+            else if(count != -1)
             {
                 if (animations[current].Active)
                     animations[current].Update(gameTime);

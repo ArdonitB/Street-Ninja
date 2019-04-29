@@ -9,6 +9,45 @@ using System.Threading.Tasks;
 
 namespace StreetNinja.Controls
 {
+    public class Label: Component
+    {
+        #region Fields
+
+        private SpriteFont _font;
+
+        #endregion
+
+        #region Properties
+
+        public Color PenColor { get; set; }
+
+        public Vector2 Position { get; set; }
+
+
+        public string Text { get; set; }
+        #endregion
+
+        #region Methods
+
+        public Label( SpriteFont font)
+        {
+            _font = font;
+            PenColor = Color.Black;
+        }
+        public override void Draw(GameTime gametime, SpriteBatch spriteBatch)
+        {
+            var colour = Color.White;
+
+                spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColor);
+
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+
+        }
+    }
+
     public class Button : Component 
     {
         #region Fields

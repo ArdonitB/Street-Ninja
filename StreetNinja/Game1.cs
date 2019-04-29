@@ -6,6 +6,7 @@ using Squared.Tiled;
 using StreetNinja.States;
 using System;
 using System.Collections.Generic;
+using System.Timers;
 
 
 namespace StreetNinja
@@ -33,6 +34,8 @@ namespace StreetNinja
         Rectangle healthRectangle;
 
         MouseState PastMouse;
+
+        Timer gameovertimer = new Timer();
 
         public enum ScreenState
         {
@@ -94,8 +97,7 @@ namespace StreetNinja
 
 
             Player1 = new Character(2);
-            //Enemy1 = new Enemy(5);
-            
+                       
             
             // TODO: use this.Content to load your game content here
             map = Map.Load(Path.Combine(Content.RootDirectory, "(MAP 1).tmx"), Content);
@@ -107,7 +109,7 @@ namespace StreetNinja
 
             viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y);
 
-            Player1.Initialize(viewportPosition, true,  this, 6);
+            Player1.Initialize(viewportPosition, true,  this, 6, 4 );
             Player1.AddAnimation("run0,run1,run2,run3,run4,run5", 6, this);
             Player1.AddAnimation("jump0,jump1,jump2,jump3", 4, this);
             Player1.AddAnimation("standing0", 1, this);
@@ -120,7 +122,7 @@ namespace StreetNinja
             for (int i = 1; i <= 5; i++)
             {
                 Enemy Enemy1 = new Enemy(5);
-                Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
+                Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
                 Enemy1.AddAnimation("Enemy1", 1, this);
                 Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
                 Enemy1.AddAnimation("hit", 1, this);
@@ -142,12 +144,12 @@ namespace StreetNinja
             // TODO: Unload any non ContentManager content here
         }
 
-        
 
-           
 
-          
-        
+
+
+
+
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -156,7 +158,8 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
+
+
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -168,111 +171,130 @@ namespace StreetNinja
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Vector2 playerpos = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y);
-
-            if (jumppixels <=0 && Player1.CurrentAnimation ==0)
-                Player1.CurrentAnimation = 2;
-
-            KeyboardState keys = Keyboard.GetState();
-
-            if (keys.IsKeyDown(Keys.U))
+            if (gamestate == ScreenState.Playing)
             {
-                Player1.Health += (float)0.25;
+                Vector2 playerpos = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y);
 
-            }
+                if (jumppixels <= 0 && Player1.CurrentAnimation == 0)
+                    Player1.CurrentAnimation = 2;
 
-            if (keys.IsKeyDown(Keys.W))
-            { 
-                map.ObjectGroups["5Objects"].Objects["Player1"].Y -= 2;
-                if(!Player1.Playing.Active)
+                KeyboardState keys = Keyboard.GetState();
+
+                if (keys.IsKeyDown(Keys.U))
                 {
-                    Player1.CurrentAnimation = 0;
-                    Player1.Playing.Active = true;
+                    Player1.Health += (float)0.25;
+
                 }
-
-            }
-
-            if (keys.IsKeyDown(Keys.S))
-            {
-                map.ObjectGroups["5Objects"].Objects["Player1"].Y += 2;
-                if (!Player1.Playing.Active)
+                if (Player1.Health < 20)
                 {
-                    Player1.CurrentAnimation = 0;
-                    Player1.Playing.Active = true;
-                }
-
-            }
-
-            if (keys.IsKeyDown(Keys.D))
-            {
-                map.ObjectGroups["5Objects"].Objects["Player1"].X += 5;
-                
-                Player1.Facing = true;
-                if (!Player1.Playing.Active)
-                {
-                    Player1.CurrentAnimation = 0;
-                    Player1.Playing.Active = true;
-                }
-
-            }
-
-            if (keys.IsKeyDown(Keys.A))
-            {
-                map.ObjectGroups["5Objects"].Objects["Player1"].X -= 5;
-                Player1.Facing = false;
-                if (!Player1.Playing.Active)
-                {
-                    Player1.CurrentAnimation = 0;
-                    Player1.Playing.Active = true;
-                }
-            }
-            if (keys.IsKeyDown(Keys.Space))
-            { 
-                if (jumpcount < 2)
-                {
-                    jumpcount++;
-                    jumppixels += 30;
-                    Player1.CurrentAnimation = 1;
-                }
-            }
-            if (keys.IsKeyDown(Keys.J))
-            {
-                if (Player1.CurrentAnimation ==2 ||Player1.CurrentAnimation==3)
-                {
-                    Player1.CurrentAnimation = 3;
-                    Player1.Playing.Active = true;
-                }
-                else if (Player1.CurrentAnimation ==0)
-                {
-                    Player1.CurrentAnimation = 5;
-                    Player1.Playing.Active = true;
-                }
-               
-            }
-            Rectangle p = Player1.punchbox;
-            int j = 1;
-            foreach (Enemy Enemy1 in enemies)
-            {
-                if (Enemy1.CurrentAnimation != 3)
-                {
-                    Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y), Player1);
-                    map.ObjectGroups["5Objects"].Objects["Enemy" + j].Texture = Enemy1.GetFrameTexture;
-                    Rectangle e = Enemy1.hitbox;
-
-                    Rectangle b = new Rectangle(0, 0, 0, 0);
-                    bool intersects = false;
-                    //Console.WriteLine(p + " - " + e);
-                    if (p != b)
+                    Console.WriteLine(Player1.Health);
+                    if (keys.IsKeyDown(Keys.W))
                     {
-                        intersects = e.Intersects(p);
-
-                        if (intersects)
+                        map.ObjectGroups["5Objects"].Objects["Player1"].Y -= 2;
+                        if (!Player1.Playing.Active)
                         {
-                            Console.WriteLine("hit enemy: " + Enemy1.Hitable);
+                            Player1.CurrentAnimation = 0;
+                            Player1.Playing.Active = true;
+                        }
+
+                    }
+
+                    if (keys.IsKeyDown(Keys.S))
+                    {
+                        map.ObjectGroups["5Objects"].Objects["Player1"].Y += 2;
+                        if (!Player1.Playing.Active)
+                        {
+                            Player1.CurrentAnimation = 0;
+                            Player1.Playing.Active = true;
+                        }
+
+                    }
+
+                    if (keys.IsKeyDown(Keys.D))
+                    {
+                        map.ObjectGroups["5Objects"].Objects["Player1"].X += 5;
+
+                        Player1.Facing = true;
+                        if (!Player1.Playing.Active)
+                        {
+                            Player1.CurrentAnimation = 0;
+                            Player1.Playing.Active = true;
+                        }
+
+                    }
+
+                    if (keys.IsKeyDown(Keys.A))
+                    {
+                        map.ObjectGroups["5Objects"].Objects["Player1"].X -= 5;
+                        Player1.Facing = false;
+                        if (!Player1.Playing.Active)
+                        {
+                            Player1.CurrentAnimation = 0;
+                            Player1.Playing.Active = true;
                         }
                     }
-                    if (intersects && Enemy1.Hitable)
+                    if (keys.IsKeyDown(Keys.Space))
                     {
+                        if (jumpcount < 2)
+                        {
+                            jumpcount++;
+                            jumppixels += 30;
+                            Player1.CurrentAnimation = 1;
+                        }
+                    }
+                    if (keys.IsKeyDown(Keys.J))
+                    {
+                        if (Player1.CurrentAnimation == 2 || Player1.CurrentAnimation == 3)
+                        {
+                            Player1.CurrentAnimation = 3;
+                            Player1.Playing.Active = true;
+                        }
+                        else if (Player1.CurrentAnimation == 0)
+                        {
+                            Player1.CurrentAnimation = 5;
+                            Player1.Playing.Active = true;
+                        }
+
+                    }
+                }
+                else
+                {
+                    if (!Player1.Playing.Active && Player1.CurrentAnimation != 4)
+                    {
+                        Player1.CurrentAnimation = 4;
+                        Player1.Playing.Active = true;
+                        if (!gameovertimer.Enabled)
+                        {
+                            gameovertimer.Interval = 1000;
+                            gameovertimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                            gameovertimer.Enabled = true;
+                        }
+                    }
+                }
+                Rectangle p = Player1.punchbox;
+                int j = 1;
+                foreach (Enemy Enemy1 in enemies)
+                {
+                    if (Enemy1.CurrentAnimation != 3)
+                    {
+                        Enemy1.Update(gameTime, new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y), Player1);
+                        map.ObjectGroups["5Objects"].Objects["Enemy" + j].Texture = Enemy1.GetFrameTexture;
+                        Rectangle e = Enemy1.hitbox;
+
+                        Rectangle b = new Rectangle(0, 0, 0, 0);
+                        bool intersects = false;
+                        //Console.WriteLine(p + " - " + e);
+                        if (p != b)
+                        {
+                            intersects = e.Intersects(p);
+
+                            if (intersects)
+                            {
+                                Console.WriteLine("hit enemy: " + Enemy1.Hitable);
+                            }
+                        }
+                        if (intersects && Enemy1.Hitable)
+                        {
 
                             Enemy1.CurrentAnimation = 2;
                             Enemy1.Playing.Active = true;
@@ -280,63 +302,70 @@ namespace StreetNinja
                             Console.WriteLine("hit enemy & hitable: " + Enemy1.Hitable);
                             Console.WriteLine(Player1.Position.Y + " " + Enemy1.Position.Y);
                             Enemy1.Hitable = false;
+                        }
                     }
+                    j++;
                 }
-                j++;
+
+                if (keys.IsKeyDown(Keys.Y))
+                {
+                    Player1.CurrentAnimation = 4;
+                }
+
+
+                if (CheckBounds(map.ObjectGroups["5Objects"].Objects["Player1"]))
+                {
+                    map.ObjectGroups["5Objects"].Objects["Player1"].Y = (int)playerpos.Y;
+                    map.ObjectGroups["5Objects"].Objects["Player1"].X = (int)playerpos.X;
+
+
+                }
+
+                viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X + map.ObjectGroups["5Objects"].Objects["Player1"].Width / 2 - 300, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //if (playerpos.X < 500)
+                //    viewportPosition = new Vector2(0, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 1000)
+                //    viewportPosition = new Vector2(500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 1500)
+                //    viewportPosition = new Vector2(1000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if(playerpos.X < 2000)
+                //    viewportPosition = new Vector2(1500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 2500)
+                //    viewportPosition = new Vector2(2000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 3000)
+                //    viewportPosition = new Vector2(2500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 3500)
+                //    viewportPosition = new Vector2(3000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 4000)
+                ///    viewportPosition = new Vector2(3500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 4500)
+                //   viewportPosition = new Vector2(4000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                //else if (playerpos.X < 5000)
+                //  viewportPosition = new Vector2(4500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
+                // TODO: Add your update logic here
+
+                if (jumppixels > 0)
+                    jumppixels -= 4;
+                else
+                    jumpcount = 0;
+
+
+
+                Player1.Update(gameTime);
+
+                map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
+
+
             }
-
-            if (keys.IsKeyDown(Keys.Y))
-            {
-                Player1.CurrentAnimation = 4;
-            }
-
-
-            if (CheckBounds(map.ObjectGroups["5Objects"].Objects["Player1"]))
-            {
-                map.ObjectGroups["5Objects"].Objects["Player1"].Y = (int)playerpos.Y;
-                map.ObjectGroups["5Objects"].Objects["Player1"].X = (int)playerpos.X;
-                
-
-            }
-
-            viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X + map.ObjectGroups["5Objects"].Objects["Player1"].Width/2 - 300, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //if (playerpos.X < 500)
-            //    viewportPosition = new Vector2(0, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 1000)
-            //    viewportPosition = new Vector2(500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 1500)
-            //    viewportPosition = new Vector2(1000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if(playerpos.X < 2000)
-            //    viewportPosition = new Vector2(1500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 2500)
-            //    viewportPosition = new Vector2(2000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 3000)
-            //    viewportPosition = new Vector2(2500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 3500)
-            //    viewportPosition = new Vector2(3000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 4000)
-            ///    viewportPosition = new Vector2(3500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 4500)
-            //   viewportPosition = new Vector2(4000, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            //else if (playerpos.X < 5000)
-            //  viewportPosition = new Vector2(4500, map.ObjectGroups["5Objects"].Objects["Player1"].Y - 240);
-            // TODO: Add your update logic here
-
-            if (jumppixels > 0)
-                jumppixels -= 4;
-            else
-                jumpcount = 0;
-
-            
-            
-            Player1.Update(gameTime);
-
-            map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
-
-                
-
             _currentState.PostUpdate(gameTime);
             base.Update(gameTime);
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            gameovertimer.Enabled = false;
+            _currentState = new GameOverState(this, graphics.GraphicsDevice, Content);
+            gamestate = ScreenState.GameOver;
         }
 
         public bool CheckBounds(Squared.Tiled.Object obj)
@@ -419,8 +448,13 @@ namespace StreetNinja
             {
                 _currentState.Draw(gameTime, spriteBatch);
             }
+            else if (gamestate == ScreenState.GameOver)
+            {
+                _currentState.Draw(gameTime, spriteBatch);
+            }
 
-            
+
+
             base.Draw(gameTime);
         }
     }
