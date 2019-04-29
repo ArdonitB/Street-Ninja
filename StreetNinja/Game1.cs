@@ -93,7 +93,7 @@ namespace StreetNinja
             _currentState = new MenuState(this, graphics.GraphicsDevice, Content);
 
 
-            Player1 = new Character(5);
+            Player1 = new Character(2);
             //Enemy1 = new Enemy(5);
             
             
@@ -120,11 +120,12 @@ namespace StreetNinja
             for (int i = 1; i <= 5; i++)
             {
                 Enemy Enemy1 = new Enemy(5);
-                Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 4, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
+                Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
                 Enemy1.AddAnimation("Enemy1", 1, this);
                 Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
                 Enemy1.AddAnimation("hit", 1, this);
                 Enemy1.AddAnimation("dead1,dead2", 2, this);
+                Enemy1.AddAnimation("eattack1,eattack2,eattack3", 3, this);
                 Enemy1.CurrentAnimation = 0;
                 enemies.Add(Enemy1);
             }
@@ -155,7 +156,7 @@ namespace StreetNinja
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-                          
+            
             if (_nextState != null)
             {
                 _currentState = _nextState;
@@ -176,7 +177,7 @@ namespace StreetNinja
 
             if (keys.IsKeyDown(Keys.U))
             {
-                Player1.Health -= (float)0.25;
+                Player1.Health += (float)0.25;
 
             }
 
@@ -372,7 +373,7 @@ namespace StreetNinja
             Rectangle flagrec = new Rectangle(flag.X,flag.Y,flag.Width,flag.Height);
             if (playrec.Intersects(flagrec))
             {
-                
+                Console.WriteLine("test");
             }
 
             return check;

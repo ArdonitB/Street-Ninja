@@ -54,6 +54,10 @@ namespace StreetNinja
 
         public void Update(GameTime gameTime, Vector2 PlayerPos, Character Player1)
         {
+            
+          
+                
+                
             if (Health > 0)
             {
                 float dist = Vector2.Distance(PlayerPos, Position);
@@ -80,8 +84,10 @@ namespace StreetNinja
                 {
                     if (CurrentAnimation != 0)
                     {
+                        
                         CurrentAnimation = 0;
                         Playing.Active = true;
+                        
                     }
                 }
                 else
@@ -92,9 +98,17 @@ namespace StreetNinja
                         Playing.Active = true;
                     }
                 }
-                if (dist <= 80 && CurrentAnimation != 0)
+
+                if (Player1.Hitable)
                 {
-                    CurrentAnimation = 0;
+                    if (dist <= 80 && CurrentAnimation != 0)
+                    {
+                        Player1.Hitable = false;
+                        Player1.Health += 1;
+                        CurrentAnimation = 4;
+                        Playing.Active = true;
+                    }
+
                 }
             }
             else
@@ -221,7 +235,7 @@ namespace StreetNinja
                 hitable = false;
                 if (!hittimer.Enabled)
                 {
-                    hittimer.Interval = 250;
+                    hittimer.Interval =1000;
                     hittimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
                     hittimer.Enabled = true;
                 }
@@ -326,9 +340,9 @@ namespace StreetNinja
                 if (Playing.currentFrame >=6)
                 {
                     if(!Facing)
-                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+20 +20, 20, 20);    
+                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+10 +30, 30, 30);    
                     else
-                        temp = new Rectangle((int)pos.X +55, (int)pos.Y+20 +20, 20, 20);
+                        temp = new Rectangle((int)pos.X +55, (int)pos.Y+10 +30, 30, 30);
                 }
             }
             else if (CurrentAnimation == 5)
@@ -336,9 +350,9 @@ namespace StreetNinja
                 if (Playing.currentFrame >= 6)
                 {
                     if (!Facing)
-                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+20 + 20, 20, 20);
+                        temp = new Rectangle((int)pos.X -10, (int)pos.Y+30 + 30, 30, 30);
                     else
-                        temp = new Rectangle((int)pos.X + 55, (int)pos.Y+20 + 20, 20, 20);
+                        temp = new Rectangle((int)pos.X + 55, (int)pos.Y+30 + 30, 30, 30);
 
                 }
             }
@@ -378,7 +392,8 @@ namespace StreetNinja
             // Set the texture data with our color information.  
             pixel.SetData<Color>(colorData);
 
-            rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 80 * (int)(starthealth / health), 10);
+            rectangle = new Rectangle((int)pos.X, (int)pos.Y -13, 8 *(int) ((starthealth / health)*10), 10);
+            //rectangle = new Rectangle((int)Position.X - (int)pos.X, (int)Position.Y - (int)pos.Y - 13, (int)(80 * (Health / starthealth)), 10);
             hitbox = new Rectangle((int)pos.X+20, (int)pos.Y, 40 ,100);
 
             //spriteBatch.Draw(pixel, hitbox, Color.Green);
@@ -390,3 +405,8 @@ namespace StreetNinja
         }
     }
 }
+
+
+
+
+

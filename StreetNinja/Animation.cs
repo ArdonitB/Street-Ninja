@@ -91,6 +91,7 @@ namespace StreetNinja
         {
             if (Active)
             {
+                
                 elapsedTime += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
 
                 // If the elapsed time is larger than the frame time
