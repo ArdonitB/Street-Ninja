@@ -51,7 +51,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="States\GameOverState.cs" />
     <Compile Include="States\GameState.cs" />
+    <Compile Include="States\GameWinState.cs" />
     <Compile Include="States\MenuState.cs" />
+    <Compile Include="States\OptionState.cs" />
     <Compile Include="States\State.cs" />
     <Compile Include="Tiled.cs" />
   </ItemGroup>

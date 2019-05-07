@@ -20,10 +20,16 @@ namespace StreetNinja.States
             var buttonTexture = _content.Load<Texture2D>("Controls/Button");
             var buttonFont = _content.Load<SpriteFont>("Regular");
 
-
+            var newLabel = new Label(buttonFont)
+            {
+                Position = new Vector2(230, 50),
+                Text = "STREET NINJA",
+                PenColor = Color.Red,
+                Shadow = Color.Yellow
+            };
             var newGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(80, 50),
+                Position = new Vector2(80, 100),
                 Text = "New Game",
             };
 
@@ -31,15 +37,15 @@ namespace StreetNinja.States
 
             var loadGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(80, 175),
-                Text = "Load Game",
+                Position = new Vector2(80, 225),
+                Text = "Option",
             };
 
             loadGameButton.Click += LoadGameButton_Click;
 
             var quitGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(80, 300),
+                Position = new Vector2(80, 350),
                 Text = "Quit Game",
             };
 
@@ -47,6 +53,7 @@ namespace StreetNinja.States
 
             _components = new List<Component>()
             {
+                newLabel,
                 newGameButton,
                 loadGameButton,
                 quitGameButton,
@@ -80,7 +87,8 @@ namespace StreetNinja.States
         }
         private void LoadGameButton_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Load Game");
+            _game.ChangeState(new OptionState(_game, _graphicsDevice, _content));
+            _game.gamestate = Game1.ScreenState.Options;
         }
         private void NewGameButton_Click(object sender, EventArgs e)
         {

@@ -10,11 +10,11 @@ using StreetNinja.Controls;
 
 namespace StreetNinja.States
 {
-    class GameOverState: State
+    class GameWinState : State
     {
         private List<Component> _components;
 
-        public GameOverState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
+        public GameWinState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/Button");
             var buttonFont = _content.Load<SpriteFont>("Regular");
@@ -23,15 +23,15 @@ namespace StreetNinja.States
             var newLabel = new Label(buttonFont)
             {
                 Position = new Vector2(230, 50),
-                Text = "GAME OVER",
-                PenColor = Color.Red,
+                Text = "YOU WIN",
+                PenColor = Color.Green,
                 Shadow = Color.White
             };
 
             var newLabel1 = new Label(buttonFont)
             {
                 Position = new Vector2(150, 100),
-                Text = "You failed to complete this level.\n\nClick below to continue",
+                Text = "You have completed this level.\n\nClick below to continue",
                 PenColor = Color.White,
             };
 
@@ -77,7 +77,7 @@ namespace StreetNinja.States
         {
             _game.Exit();
         }
-       
+
         private void NewGameButton_Click(object sender, EventArgs e)
         {
             Console.WriteLine("New Game");

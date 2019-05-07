@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StreetNinja.Controls
 {
-    public class Label: Component
+    public class Label : Component
     {
         #region Fields
 
@@ -23,23 +23,24 @@ namespace StreetNinja.Controls
 
         public Vector2 Position { get; set; }
 
+        public Color Shadow { get; set; }
+
 
         public string Text { get; set; }
         #endregion
 
         #region Methods
 
-        public Label( SpriteFont font)
+        public Label(SpriteFont font)
         {
             _font = font;
             PenColor = Color.Black;
         }
         public override void Draw(GameTime gametime, SpriteBatch spriteBatch)
         {
-            var colour = Color.White;
-
-                spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColor);
-
+            if (Shadow != null)
+                spriteBatch.DrawString(_font, Text, Position+new Vector2(1,1), Shadow);
+            spriteBatch.DrawString(_font, Text, Position, PenColor);
         }
 
         public override void Update(GameTime gameTime)
@@ -48,7 +49,7 @@ namespace StreetNinja.Controls
         }
     }
 
-    public class Button : Component 
+    public class Button : Component
     {
         #region Fields
 
@@ -119,12 +120,12 @@ namespace StreetNinja.Controls
             var mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 1, 1);
 
             _isHovering = false;
-             
-            if(mouseRectangle.Intersects(Rectangle))
+
+            if (mouseRectangle.Intersects(Rectangle))
             {
                 _isHovering = true;
 
-                if(_currentMouse.LeftButton ==ButtonState.Released && _previousMouse.LeftButton == ButtonState.Pressed )
+                if (_currentMouse.LeftButton == ButtonState.Released && _previousMouse.LeftButton == ButtonState.Pressed)
                 {
                     Click?.Invoke(this, new EventArgs());
                 }
@@ -133,7 +134,5 @@ namespace StreetNinja.Controls
         }
         #endregion
     }
+    #endregion
 }
-            
-
-    

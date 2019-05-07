@@ -24,6 +24,7 @@ namespace StreetNinja
         Layer pavement;
         Vector2 viewportPosition;
         int tilePixel;
+        int deadenemies;
         Squared.Tiled.Object player;
         Character Player1;
         List<Enemy> enemies = new List<Enemy>();
@@ -40,8 +41,10 @@ namespace StreetNinja
         public enum ScreenState
         {
             MainMenu,
+            Options,
             Playing,
-            GameOver
+            GameOver,
+            GameComplete
         }
 
         public ScreenState gamestate = ScreenState.MainMenu;
@@ -53,6 +56,12 @@ namespace StreetNinja
         public void ChangeState(State state)
         {
             _nextState = state;
+        }
+
+        public void ToggleFullScreen()
+        {
+            graphics.IsFullScreen = !graphics.IsFullScreen;
+            graphics.ApplyChanges();
         }
   
         int jumppixels = 0;
@@ -96,7 +105,7 @@ namespace StreetNinja
             _currentState = new MenuState(this, graphics.GraphicsDevice, Content);
 
 
-            Player1 = new Character(2);
+            Player1 = new Character(4);
                        
             
             // TODO: use this.Content to load your game content here
@@ -119,9 +128,9 @@ namespace StreetNinja
             Player1.AddAnimation("standing0,runattack6,runattack7,runattack8,runattack8,runattack9,runattack10,runattack11,runattack12", 9, this);
             Player1.CurrentAnimation = 2;
 
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 9; i++)
             {
-                Enemy Enemy1 = new Enemy(5);
+                Enemy Enemy1 = new Enemy(2);
                 Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
                 Enemy1.AddAnimation("Enemy1", 1, this);
                 Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
@@ -131,7 +140,15 @@ namespace StreetNinja
                 Enemy1.CurrentAnimation = 0;
                 enemies.Add(Enemy1);
             }
-           
+            Enemy boss = new Enemy(8);
+            boss.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy10"].X, map.ObjectGroups["5Objects"].Objects["Enemy10"].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy10"]);
+            boss.AddAnimation("Enemy1", 1, this);
+            boss.AddAnimation("erun1,erun2,erun3", 3, this);
+            boss.AddAnimation("hit", 1, this);
+            boss.AddAnimation("dead1,dead2", 2, this);
+            boss.AddAnimation("eattack1,eattack2,eattack3", 3, this);
+            boss.CurrentAnimation = 0;
+            enemies.Add(boss);
 
         }
 
@@ -273,6 +290,7 @@ namespace StreetNinja
                 }
                 Rectangle p = Player1.punchbox;
                 int j = 1;
+                deadenemies = 0;
                 foreach (Enemy Enemy1 in enemies)
                 {
                     if (Enemy1.CurrentAnimation != 3)
@@ -304,6 +322,8 @@ namespace StreetNinja
                             Enemy1.Hitable = false;
                         }
                     }
+                    else
+                        deadenemies++;
                     j++;
                 }
 
@@ -354,8 +374,7 @@ namespace StreetNinja
                 Player1.Update(gameTime);
 
                 map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Player1.GetFrameTexture;
-
-
+                
             }
             _currentState.PostUpdate(gameTime);
             base.Update(gameTime);
@@ -400,9 +419,12 @@ namespace StreetNinja
 
             Squared.Tiled.Object flag = map.ObjectGroups["5Objects"].Objects["Flag"];
             Rectangle flagrec = new Rectangle(flag.X,flag.Y,flag.Width,flag.Height);
-            if (playrec.Intersects(flagrec))
+            if (playrec.Intersects(flagrec) && deadenemies>9)
             {
                 Console.WriteLine("test");
+
+                _currentState = new GameWinState(this, graphics.GraphicsDevice, Content);
+                gamestate = ScreenState.GameComplete;
             }
 
             return check;
@@ -448,7 +470,15 @@ namespace StreetNinja
             {
                 _currentState.Draw(gameTime, spriteBatch);
             }
+            else if (gamestate == ScreenState.Options)
+            {
+                _currentState.Draw(gameTime, spriteBatch);
+            }
             else if (gamestate == ScreenState.GameOver)
+            {
+                _currentState.Draw(gameTime, spriteBatch);
+            }
+            else if (gamestate == ScreenState.GameComplete)
             {
                 _currentState.Draw(gameTime, spriteBatch);
             }

@@ -16,6 +16,7 @@ namespace StreetNinja
     {
         Animation[] animations;
         public Vector2 Position;
+        public Color filter;
         Game1 Parent;
         public bool Facing;
         int AnimationsNo;

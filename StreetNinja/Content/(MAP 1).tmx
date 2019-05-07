@@ -120,12 +120,17 @@
 </data>
  </layer>
  <objectgroup name="5Objects">
-  <object id="1" name="Player1" x="16" y="527" width="77" height="119"/>
-  <object id="2" name="Enemy1" x="573" y="459" width="77" height="119"/>
-   <object id="6" name="Enemy2" x="360" y="459" width="77" height="119"/>
-   <object id="7" name="Enemy3" x="850" y="459" width="77" height="119"/>
-   <object id="8" name="Enemy4" x="1200" y="459" width="77" height="119"/>
-   <object id="9" name="Enemy5" x="1500" y="459" width="77" height="119"/>
+  <object id="1" type="normal" name="Player1" x="16" y="527" width="77" height="119"/>
+  <object id="2" type="normal" name="Enemy1" x="573" y="459" width="77" height="119"/>
+   <object id="6" type="normal" name="Enemy2" x="360" y="459" width="77" height="119"/>
+   <object id="7" type="normal" name="Enemy3" x="850" y="459" width="77" height="119"/>
+   <object id="8" type="normal" name="Enemy4" x="1200" y="459" width="77" height="119"/>
+   <object id="9" type="normal" name="Enemy5" x="1500" y="459" width="77" height="119"/>
+   <object id="10" type="normal" name="Enemy6" x="2900" y="559" width="77" height="119"/>
+   <object id="11" type="normal" name="Enemy7" x="3200" y="559" width="77" height="119"/>
+   <object id="12" type="normal" name="Enemy8" x="3700" y="559" width="77" height="119"/>
+   <object id="13" type="normal" name="Enemy9" x="4100" y="559" width="77" height="119"/>
+   <object id="13" type="boss" name="Enemy10" x="4500" y="559" width="77" height="119"/>
   <object id="5" name="Flag" x="4629" y="602" width="90" height="152"/>
  </objectgroup>
 </map>
