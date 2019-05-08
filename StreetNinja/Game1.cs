@@ -130,7 +130,7 @@ namespace StreetNinja
 
             for (int i = 1; i <= 9; i++)
             {
-                Enemy Enemy1 = new Enemy(2);
+                Enemy Enemy1 = new Enemy(1);
                 Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
                 Enemy1.AddAnimation("Enemy1", 1, this);
                 Enemy1.AddAnimation("erun1,erun2,erun3", 3, this);
@@ -140,13 +140,13 @@ namespace StreetNinja
                 Enemy1.CurrentAnimation = 0;
                 enemies.Add(Enemy1);
             }
-            Enemy boss = new Enemy(8);
+            Enemy boss = new Enemy(4);
             boss.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy10"].X, map.ObjectGroups["5Objects"].Objects["Enemy10"].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy10"]);
-            boss.AddAnimation("Enemy1", 1, this);
-            boss.AddAnimation("erun1,erun2,erun3", 3, this);
+            boss.AddAnimation("bEnemy1", 1, this);
+            boss.AddAnimation("berun1,berun2,berun3", 3, this);
             boss.AddAnimation("hit", 1, this);
-            boss.AddAnimation("dead1,dead2", 2, this);
-            boss.AddAnimation("eattack1,eattack2,eattack3", 3, this);
+            boss.AddAnimation("bdead1,bdead2", 2, this);
+            boss.AddAnimation("beattack1,beattack2,beattack3", 3, this);
             boss.CurrentAnimation = 0;
             enemies.Add(boss);
 
