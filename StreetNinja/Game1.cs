@@ -27,7 +27,7 @@ namespace StreetNinja
         int deadenemies;
         Squared.Tiled.Object player;
         Character Player1;
-        List<Enemy> enemies = new List<Enemy>();
+        List<Enemy> enemies = new List<Enemy>(); //Declares a list for enemies as  their will be many on the stage
         //Enemy Enemy1;
 
         //Health Bar
@@ -113,7 +113,7 @@ namespace StreetNinja
             map.ObjectGroups["5Objects"].Objects["Player1"].Texture = Content.Load<Texture2D>("Player1");
             map.ObjectGroups["5Objects"].Objects["Enemy1"].Texture = Content.Load<Texture2D>("Enemy1");
             map.ObjectGroups["5Objects"].Objects["Flag"].Texture = Content.Load<Texture2D>("Flag");
-            
+            // Adds the colision layer
             bounds = map.Layers["0Collision"];
 
             viewportPosition = new Vector2(map.ObjectGroups["5Objects"].Objects["Player1"].X, map.ObjectGroups["5Objects"].Objects["Player1"].Y);
@@ -127,8 +127,8 @@ namespace StreetNinja
             Player1.AddAnimation("death0,death1,death2,death3,death4,death5,death6,death7,death8", 9, this );
             Player1.AddAnimation("standing0,runattack6,runattack7,runattack8,runattack8,runattack9,runattack10,runattack11,runattack12", 9, this);
             Player1.CurrentAnimation = 2;
-
-            for (int i = 1; i <= 9; i++)
+            
+            for (int i = 1; i <= 9; i++) //for loop used as enemy is an array
             {
                 Enemy Enemy1 = new Enemy(1);
                 Enemy1.Initialize(new Vector2(map.ObjectGroups["5Objects"].Objects["Enemy"+i].X, map.ObjectGroups["5Objects"].Objects["Enemy"+i].Y), false, this, 5, 3, map.ObjectGroups["5Objects"].Objects["Enemy"+i]);
@@ -149,6 +149,11 @@ namespace StreetNinja
             boss.AddAnimation("beattack1,beattack2,beattack3", 3, this);
             boss.CurrentAnimation = 0;
             enemies.Add(boss);
+
+            // On the 3 above sections of code we have animations for each character in the game:
+            // Player, boss and enemy
+             
+          
 
         }
 
@@ -194,7 +199,7 @@ namespace StreetNinja
 
                 if (jumppixels <= 0 && Player1.CurrentAnimation == 0)
                     Player1.CurrentAnimation = 2;
-
+                // Below the player inputs are shown                                                                                                                   
                 KeyboardState keys = Keyboard.GetState();
 
                 if (keys.IsKeyDown(Keys.U))
@@ -264,8 +269,8 @@ namespace StreetNinja
                         if (Player1.CurrentAnimation == 2 || Player1.CurrentAnimation == 3)
                         {
                             Player1.CurrentAnimation = 3;
-                            Player1.Playing.Active = true;
-                        }
+                            Player1.Playing.Active = true;  //Player attack animation
+                        } 
                         else if (Player1.CurrentAnimation == 0)
                         {
                             Player1.CurrentAnimation = 5;
@@ -311,7 +316,7 @@ namespace StreetNinja
                                 Console.WriteLine("hit enemy: " + Enemy1.Hitable);
                             }
                         }
-                        if (intersects && Enemy1.Hitable)
+                        if (intersects && Enemy1.Hitable) //Checks for intersection of hitboxes to register hits
                         {
 
                             Enemy1.CurrentAnimation = 2;
@@ -395,7 +400,7 @@ namespace StreetNinja
                 obj.X,
                 obj.Y + (obj.Height-10),
                 obj.Width,
-                10
+                10    //initializes bounds between the player and the map
                 );
 
             for (int x = 0; x < map.Width; x++)
@@ -468,7 +473,7 @@ namespace StreetNinja
             }
             else if (gamestate == ScreenState.MainMenu)
             {
-                _currentState.Draw(gameTime, spriteBatch);
+                _currentState.Draw(gameTime, spriteBatch); //draws the different maps per transition
             }
             else if (gamestate == ScreenState.Options)
             {

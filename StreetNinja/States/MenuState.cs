@@ -12,24 +12,25 @@ using StreetNinja.Controls;
 namespace StreetNinja.States
 {
     public class MenuState : State
-    {
+    { //MenuState of a sub class of state
+        
         private List<Component> _components;
 
         public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
         {
             var buttonTexture = _content.Load<Texture2D>("Controls/Button");
-            var buttonFont = _content.Load<SpriteFont>("Regular");
+            var buttonFont = _content.Load<SpriteFont>("Regular"); // Declares texture of button and font by loading content
 
             var newLabel = new Label(buttonFont)
             {
                 Position = new Vector2(230, 50),
-                Text = "STREET NINJA",
+                Text = "STREET NINJA", 
                 PenColor = Color.Red,
                 Shadow = Color.Yellow
             };
             var newGameButton = new Button(buttonTexture, buttonFont)
             {
-                Position = new Vector2(80, 100),
+                Position = new Vector2(80, 100), //position declared for button
                 Text = "New Game",
             };
 

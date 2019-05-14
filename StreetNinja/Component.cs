@@ -14,4 +14,5 @@ namespace StreetNinja
 
         public abstract void Update(GameTime gametime);
     }
+    // Initializes the parent class of component
 }

@@ -11,6 +11,7 @@ namespace StreetNinja.States
 {
     public abstract class State
     {
+        //Parent class for states with base properties and methods declared
         #region Fields
 
         protected ContentManager _content;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StreetNinja.Controls
 {
     public class Label : Component
-    {
+    { // Label is a sub class of parent class component
         #region Fields
 
         private SpriteFont _font;
@@ -23,8 +23,7 @@ namespace StreetNinja.Controls
 
         public Vector2 Position { get; set; }
 
-        public Color Shadow { get; set; }
-
+        public Color Shadow { get; set; } // declares properties of a label
 
         public string Text { get; set; }
         #endregion
@@ -36,7 +35,7 @@ namespace StreetNinja.Controls
             _font = font;
             PenColor = Color.Black;
         }
-        public override void Draw(GameTime gametime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gametime, SpriteBatch spriteBatch) // Declares methods for labels
         {
             if (Shadow != null)
                 spriteBatch.DrawString(_font, Text, Position+new Vector2(1,1), Shadow);
@@ -50,14 +49,14 @@ namespace StreetNinja.Controls
     }
 
     public class Button : Component
-    {
-        #region Fields
+    { //Declares sub class of button
+        #region Fields 
 
         private MouseState _currentMouse;
 
         private SpriteFont _font;
 
-        private bool _isHovering;
+        private bool _isHovering; // Declares fields and different states of the button
 
         private MouseState _previousMouse;
 

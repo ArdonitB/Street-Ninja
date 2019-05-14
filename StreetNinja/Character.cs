@@ -23,7 +23,7 @@ namespace StreetNinja
         public int current = 0;
         int count = -1;
         Squared.Tiled.Object MapObject;
-        GraphicsDeviceManager graphics;
+        GraphicsDeviceManager graphics;   // declares variables for the sub class Enemy
         SpriteBatch spriteBatch;
         Map map;
         Layer bounds;
@@ -32,7 +32,7 @@ namespace StreetNinja
         int tilePixel;
         Squared.Tiled.Object player;
         Enemy Enemy1;
-
+        
 
         public Enemy(int newhealth):base(newhealth)
         {
@@ -61,7 +61,7 @@ namespace StreetNinja
                 
             if (Health > 0)
             {
-                float dist = Vector2.Distance(PlayerPos, Position);
+                float dist = Vector2.Distance(PlayerPos, Position); //Allows AI to move towards the player
                 Vector2 temp = (PlayerPos - Position) / dist;
 
                 if(dist>60 && dist <250)
@@ -76,7 +76,7 @@ namespace StreetNinja
                 {
                     Facing = false;
                 }
-                else
+                else    // Ensures the enemy is facing the right way
                 {
                     Facing = true;
                 }
@@ -105,7 +105,7 @@ namespace StreetNinja
                     if (dist <= 80 && CurrentAnimation != 0)
                     {
                         Player1.Hitable = false;
-                        Player1.Health += 1;
+                        Player1.Health += 1;    //Checks to see if enemy is close enough to attack
                         CurrentAnimation = 4;
                         Playing.Active = true;
                     }
@@ -200,11 +200,12 @@ namespace StreetNinja
             pixel.SetData<Color>(colorData);
 
             rectangle = new Rectangle((int)Position.X - (int)vp.X, (int)Position.Y - (int)vp.Y- 13, (int)(80 * (Health / starthealth)), 10);
-            hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100);
+            hitbox = new Rectangle((int)Position.X - (int)vp.X+20, (int)Position.Y - (int)vp.Y, 40, 100); 
             //spriteBatch.Draw(pixel, hitbox, Color.Purple);
+            // Draws and adds logic to health bar
 
             if (Health > 0)
-                spriteBatch.Draw(pixel, rectangle, Color.Red);
+                spriteBatch.Draw(pixel, rectangle, Color.Red); // draws health bar if health is greater than 0
         }
 
     }
@@ -223,7 +224,7 @@ namespace StreetNinja
         Texture2D texture;
         int death = -1;
         Timer hittimer = new Timer();
-
+        // Declares variables for parent class character
         float health;
         public bool Hitable
         {
@@ -238,7 +239,7 @@ namespace StreetNinja
                 if (!hittimer.Enabled)
                 {
                     hittimer.Interval =1000;
-                    hittimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+                    hittimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);  //Allows frames to be "active" and allow hits for a period of time
                     hittimer.Enabled = true;
                 }
 
@@ -330,7 +331,7 @@ namespace StreetNinja
         {
             count++;
             Animation temp = new Animation();
-            temp.Initialize(Position, false, files, no, g);
+            temp.Initialize(Position, false, files, no, g); //Allows animations to work
             animations[count] = temp;
         }
 
@@ -345,7 +346,7 @@ namespace StreetNinja
                     if(!Facing)
                         temp = new Rectangle((int)pos.X -10, (int)pos.Y+10 +30, 30, 30);    
                     else
-                        temp = new Rectangle((int)pos.X +55, (int)pos.Y+10 +30, 30, 30);
+                        temp = new Rectangle((int)pos.X +55, (int)pos.Y+10 +30, 30, 30); //draws a punch box
                 }
             }
             else if (CurrentAnimation == 5)
@@ -370,7 +371,7 @@ namespace StreetNinja
         {
             if (this.Health <= 0)
             {
-                this.CurrentAnimation = death;
+                this.CurrentAnimation = death; // plays death animation is health is less than or equal to 0
 
 
 
@@ -410,7 +411,7 @@ namespace StreetNinja
 
             //spriteBatch.Draw(pixel, hitbox, Color.Green);
             //spriteBatch.Draw(pixel, punchbox, Color.Yellow);
-
+            // draws and adds logic to player health bar
 
             if (health > 0)
                 spriteBatch.Draw(pixel, rectangle, Color.Red);

@@ -12,7 +12,7 @@ using StreetNinja.Controls;
 namespace StreetNinja.States
 {
     public class OptionState : State
-    {
+    {// option state is a sub class of parent class State
         private List<Component> _components;
 
         public OptionState(Game1 game, GraphicsDevice graphicsDevice, ContentManager content) : base(game, graphicsDevice, content)
@@ -23,14 +23,14 @@ namespace StreetNinja.States
             var newLabel = new Label(buttonFont)
             {
                 Position = new Vector2(230, 50),
-                Text = "OPTIONS",
+                Text = "OPTIONS", //Declares title of options with colours
                 PenColor = Color.Red,
                 Shadow = Color.Yellow
             };
             var newToggleButton = new Button(buttonTexture, buttonFont)
             {
                 Position = new Vector2(80, 100),
-                Text = "Toggle Full Screen",
+                Text = "Toggle Full Screen",  //allows full screen and adjusts player position to account for change
             };
 
             newToggleButton.Click += NewToggleButton_Click;
